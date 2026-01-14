@@ -1,2 +1,9 @@
+require_relative './scraper'
 
-puts 'oh hello there'
+class Main
+  def self.main
+    puts "oh hello there"
+  end
+end
+
+Main.main
