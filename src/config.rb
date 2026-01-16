@@ -1,4 +1,4 @@
-
+require 'json'
 
 STATE_HOME = "~/.config/peasant_road/"
 
