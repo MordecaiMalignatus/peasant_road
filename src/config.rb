@@ -19,4 +19,12 @@ class Config
     config = JSON.parse(state_content, symbolize_names: true)
     new(**config)
   end
+
+  def write_to_disk
+    content = {
+      last_run: @last_run,
+      followed_stories: @followed_stories
+    }.to_json
+    File.write(STATE_HOME + "config.json", content)
+  end
 end

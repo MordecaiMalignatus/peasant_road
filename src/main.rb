@@ -1,9 +1,14 @@
 require_relative './scraper'
+require_relative './royal_road_client'
+
+require 'pry'
 
 class Main
   def self.main
-    s = Scraper.new
-    puts s.read_fic_table_of_content "https://www.royalroad.com/fiction/107917/sky-pride"
+    rr = RoyalRoadClient.new('107917')
+    chapters = rr.chapters
+    content = rr.chapter(chapters["Chapter 14- Making Do With What You Have"])
+    puts content
   end
 end
 
