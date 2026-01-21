@@ -1,6 +1,7 @@
 require 'json'
+require 'fileutils'
 
-STATE_HOME = "~/.config/peasant_road/"
+STATE_HOME = "#{Dir.home}/.config/peasant_road/"
 
 # The Config is a simple JSON file that contains some basic settings and
 # information. It's halfway between state file and configuration file, though it
@@ -9,12 +10,20 @@ STATE_HOME = "~/.config/peasant_road/"
 class Config
   attr_accessor :last_run, :followed_stories
 
-  def initialize(last_run:, followed_stories:)
-    @last_run = last_run
-    @followed_stories = followed_stories
+  def initialize(last_run: nil, followed_stories: nil)
+    @last_run = last_run || Time.new
+    @followed_stories = followed_stories || []
+  end
+
+  def self.ensure_config_file
+    return if File.exist?(STATE_HOME + "config.json")
+    FileUtils.mkdir_p(STATE_HOME)
+    File.write(STATE_HOME + "config.json", "{}")
   end
 
   def self.read_from_disk
+    ensure_config_file
+
     state_content = File.read(STATE_HOME + "config.json")
     config = JSON.parse(state_content, symbolize_names: true)
     new(**config)
