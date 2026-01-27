@@ -2,10 +2,20 @@ require 'httparty'
 
 class RoyalRoadClient
   include HTTParty
-  base_uri 'royalroad.com'
+  base_uri 'www.royalroad.com'
 
   def initialize()
     @options = {query: {} }
+  end
+
+  def fic_info(uri)
+    toc = self.class.get(uri)
+    doc = Nokogiri::HTML(toc.body)
+    {
+      title: doc.css('.fic-title').css('h1').text.strip,
+      # TODO(sar): Capture author profile URL
+      author: doc.css('.fic-title').css('a').text.strip,
+    }
   end
 
   # Pick out the chapter titles and their URLs.
